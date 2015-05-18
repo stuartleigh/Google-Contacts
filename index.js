@@ -132,8 +132,8 @@ GoogleContacts.prototype._saveContactsFromFeed = function (feed) {
       // property not available...
     }
   });
-  console.log(self.contacts);
-  console.log(self.contacts.length);
+  //console.log(self.contacts);
+  //console.log(self.contacts.length);
 }
 
 GoogleContacts.prototype._buildPath = function (params) {
