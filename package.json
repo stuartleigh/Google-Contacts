@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests/test.js"
   },
   "repository": {
     "type": "git",
@@ -19,8 +19,12 @@
     "api"
   ],
   "dependencies": {
+    "debug": "^2.2.0",
     "underscore": ""
   },
   "author": "Ajnasz <ajnasz@ajnasz.hu>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "inireader": "^0.3.3"
+  }
 }

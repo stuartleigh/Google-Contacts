@@ -2,7 +2,9 @@ Node.js wrapper for the Google Contacts API.
 
 # Install
 
-    npm install google-contacts
+```
+npm install google-contacts
+```
 
 # Usage
 
@@ -11,21 +13,27 @@ var GoogleContacts = require('google-contacts').GoogleContacts;
 var c = new GoogleContacts({
   token: 'oauth2 token...'
 });
-c.on('error', function (e) {
-  console.log('error', e);
-});
-c.on('contactsReceived', function (contacts) {
-  console.log('contacts: ' + contacts);
-});
-c.on('contactGroupsReceived', function (contactGroups) {
-  console.log('groups: ' + contactGroups);
-});
-c.getContacts('thin', 100);
-c.getContactGroups('thin', 200);
+
+c.getContacts(cb, params);
+
 ```
 
-getContacts and getContactGroups has two optional parameter:
-  projection and limit
-http://code.google.com/apis/contacts/docs/3.0/reference.html#Projections
-limit max how many elements do you wan't to receive
+Params:
 
+**type** (default: 'contacts')
+**alt** (default: json)
+**projection**
+**email** (default: 'default')
+**max-results** (default: 2000)
+
+See [https://developers.google.com/google-apps/contacts/v3/](https://developers.google.com/google-apps/contacts/v3/).
+
+# Test
+
+```
+ GOOGLE_TOKEN=sometoken npm run test
+ # verbose test
+ DEBUG=google-contacts GOOGLE_TOKEN=sometoken npm run test
+```
+
+You can get a test token at [https://developers.google.com/oauthplayground/](https://developers.google.com/oauthplayground/).

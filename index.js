@@ -22,6 +22,7 @@ var EventEmitter = require('events').EventEmitter,
   util = require('util'),
   url = require('url'),
   https = require('https'),
+  debug = require('debug')('google-contacts'),
   querystring = require('querystring');
 
 var GoogleContacts = function (params) {
@@ -64,8 +65,19 @@ GoogleContacts.prototype._get = function (params, cb) {
     }
   };
 
+  debug(req);
+
   https.request(req, function (res) {
     var data = '';
+
+    res.on('data', function (chunk) {
+      debug('got ' + chunk.length + ' bytes');
+      data += chunk.toString('utf-8');
+    });
+
+    res.on('error', function (err) {
+      cb(err);
+    });
 
     res.on('end', function () {
       if (res.statusCode < 200 || res.statusCode >= 300) {
@@ -73,24 +85,16 @@ GoogleContacts.prototype._get = function (params, cb) {
         return cb(error);
       }
       try {
+        debug(data);
         cb(null, JSON.parse(data));
       }
       catch (err) {
         cb(err);
       }
     });
-
-    res.on('data', function (chunk) {
-      data += chunk;
-    });
-
-    res.on('error', function (err) {
-      cb(err);
-    });
-
-  }).on('error', function (err) {
-    cb(err);
-  }).end();
+  })
+  .on('error', cb)
+  .end();
 };
 
 GoogleContacts.prototype.getContacts = function (cb, params) {
