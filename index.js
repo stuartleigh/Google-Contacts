@@ -104,6 +104,10 @@ GoogleContacts.prototype.getContacts = function (cb, params) {
   function receivedContacts(err, data) {
     if (err) return cb(err);
 
+    if(!data.feed.entry) {
+      return cb(null, []);
+    }
+
     self._saveContactsFromFeed(data.feed);
 
     var next = false;
