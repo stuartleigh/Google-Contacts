@@ -129,11 +129,14 @@ GoogleContacts.prototype._saveContactsFromFeed = function (feed) {
   feed.entry.forEach(function (entry) {
     var el;
     try {
-      if(self.params.thin){
+      if(self.params.thin) {
         el = {
           name: entry.title['$t'],
           email: entry['gd$email'][0].address // only save first email
         };
+        if (entry['gd$phoneNumber'] && entry['gd$phoneNumber'][0] && entry['gd$phoneNumber'][0].uri) {
+          el.phoneNumber =  entry['gd$phoneNumber'][0].uri.replace("tel:", "")
+        }
       }else{
         el = entry;
       }
@@ -157,6 +160,7 @@ GoogleContacts.prototype._buildPath = function (params) {
 
   var query = {
     alt: params.alt,
+    v: '3.0',
     'max-results': params['max-results']
   };
   if(params['updated-min'])
