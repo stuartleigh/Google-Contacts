@@ -20,11 +20,8 @@
   ],
   "dependencies": {
     "debug": "^2.2.0",
-    "underscore": ""
+    "lodash": "^4.5.1"
   },
   "author": "Ajnasz <ajnasz@ajnasz.hu>",
-  "license": "MIT",
-  "devDependencies": {
-    "inireader": "^0.3.3"
-  }
+  "license": "MIT"
 }
