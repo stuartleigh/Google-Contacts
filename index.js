@@ -123,15 +123,36 @@ GoogleContacts.prototype.getContacts = function (cb, params) {
     }
 };
 
+GoogleContacts.prototype.getContact = function (cb, params) {
+    var self = this;
+
+    params = _.extend(this.params, params);
+
+    this._get(_.extend({type: 'contacts'}, params, this.params), receivedContact);
+
+    if(!params.id){
+        return cb("No id found in params");
+    }
+
+    function receivedContact(err, contact) {
+        if (err) return cb(err);
+
+        cb(null, contact);
+    }
+
+};
+
 GoogleContacts.prototype._saveContactsFromFeed = function (feed) {
     var self = this;
     _.each(feed.entry, function (entry) {
-        var el;
+        var el, url;
         if (self.params.thin) {
+            url = _.get(entry, 'id.$t', '');
             el = {
                 name: _.get(entry, 'title.$t'),
                 email: _.get(entry, 'gd$email.0.address'), // only save first email
-                phoneNumber: _.get(entry, 'gd$phoneNumber.0.uri', '').replace('tel:', '')
+                phoneNumber: _.get(entry, 'gd$phoneNumber.0.uri', '').replace('tel:', ''),
+                id: url.substring(_.lastIndexOf(url, '/') + 1)
             };
         } else {
             el = entry;
@@ -151,9 +172,11 @@ GoogleContacts.prototype._buildPath = function (params) {
     params['max-results'] = params['max-results'] || 10000;
 
     var query = {
-        alt: params.alt,
-        'max-results': params['max-results']
+        alt: params.alt
     };
+
+    if(!params.id) query['max-results'] = params['max-results'];
+
     if (params['updated-min'])
         query['updated-min'] = params['updated-min'];
 
@@ -161,6 +184,7 @@ GoogleContacts.prototype._buildPath = function (params) {
     path += params.type + '/';
     path += params.email + '/';
     path += params.projection;
+    if(params.id) path +=  '/'+ params.id;
     path += '?' + qs.stringify(query);
 
     return path;
