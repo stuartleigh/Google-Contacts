@@ -126,13 +126,11 @@ GoogleContacts.prototype.getContacts = function (cb, params) {
 GoogleContacts.prototype.getContact = function (cb, params) {
     var self = this;
 
-    params = _.extend(this.params, params);
-
-    this._get(_.extend({type: 'contacts'}, params, this.params), receivedContact);
-
     if(!params.id){
         return cb("No id found in params");
     }
+
+    this._get(_.extend({type: 'contacts'}, this.params, params), receivedContact);
 
     function receivedContact(err, contact) {
         if (err) return cb(err);
