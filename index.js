@@ -126,7 +126,7 @@ GoogleContacts.prototype.getContacts = function (cb, params) {
 GoogleContacts.prototype.getContact = function (cb, params) {
     var self = this;
 
-    if(!params.id){
+    if(!_.has(params, 'id')){
         return cb("No id found in params");
     }
 
