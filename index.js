@@ -126,7 +126,7 @@ GoogleContacts.prototype.getContacts = function (cb, params) {
 GoogleContacts.prototype.getContact = function (cb, params) {
     var self = this;
 
-    if(!params.id){
+    if(!_.has(params, 'id')){
         return cb("No id found in params");
     }
 
@@ -177,6 +177,9 @@ GoogleContacts.prototype._buildPath = function (params) {
 
     if (params['updated-min'])
         query['updated-min'] = params['updated-min'];
+
+    if (params.q || params.query)
+        query.q = params.q || params.query;
 
     var path = '/m8/feeds/';
     path += params.type + '/';
