@@ -178,6 +178,9 @@ GoogleContacts.prototype._buildPath = function (params) {
     if (params['updated-min'])
         query['updated-min'] = params['updated-min'];
 
+    if (params.q || params.query)
+        query.q = params.q || params.query;
+
     var path = '/m8/feeds/';
     path += params.type + '/';
     path += params.email + '/';
