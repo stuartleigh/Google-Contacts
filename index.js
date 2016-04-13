@@ -21,8 +21,7 @@ var EventEmitter = require('events').EventEmitter,
     qs = require('querystring'),
     util = require('util'),
     url = require('url'),
-    https = require('https'),
-    debug = require('debug')('google-contacts');
+    https = require('https');
 
 var GoogleContacts = function (params) {
     if (typeof params === 'string') {
@@ -62,13 +61,10 @@ GoogleContacts.prototype._get = function (params, cb) {
         }
     };
 
-    debug(req);
-
     https.request(req, function (res) {
             var data = '';
 
             res.on('data', function (chunk) {
-                debug('got ' + chunk.length + ' bytes');
                 data += chunk.toString('utf-8');
             });
 
@@ -82,7 +78,6 @@ GoogleContacts.prototype._get = function (params, cb) {
                     return cb(error);
                 }
                 try {
-                    debug(data);
                     cb(null, JSON.parse(data));
                 }
                 catch (err) {
